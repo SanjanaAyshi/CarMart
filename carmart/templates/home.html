@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="d-flex flex-wrap align-items-center">
+  <div class="col-6 p-5">
+    <h2>Wellcome to Gear Grid..</h2>
+    <p>
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem aliquid
+      nulla reprehenderit culpa sequi saepe porro, rerum quidem quam dignissimos
+      consectetur! Eveniet a aperiam eaque, magnam quo qui beatae? Esse
+      molestias quisquam beatae et iure, quia dignissimos distinctio. Eum, nemo
+      distinctio? Ratione, quibusdam ut culpa corrupti nostrum numquam rerum eos
+    </p>
+  </div>
+  <div class="col-6">
+    <img
+      class="img-fluid mx-auto pt-3"
+      src="{% static 'car_showroom_06.jpg' %}"
+      alt=""
+      srcset=""
+    />
+  </div>
+</div>
+
+<div class="d-flex flex-wrap p-4">
+  <h5>All Categories</h5>
+  <div
+    class="col-12 d-flex p-3 text-white justify-content-center"
+    style="background-color: rgb(14, 61, 82)"
+  >
+    {% for cat in category %}
+    <div class="form-check d-flex">
+      <label class="form-check-label" for="{{cat.id}}">
+        <a
+          href="{% url 'categoryWisePost' cat.slug %}"
+          class="text-decoration-none text-white"
+          >{{cat.name}}</a
+        >
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="p-3">
+    <h4>{{data | length }} Results are</h4>
+    <h4>{{data.post.account.username}} Wellcome back</h4>
+    <div class="d-flex flex-wrap pt-5">
+      {% for post in data %}
+
+      <div class="col-sm-3" style="width: 18rem">
+        <div class="card mx-2">
+          <div class="card-body">
+            <img
+              class="card-img-top"
+              style="width: 98%"
+              src="{{post.image.url}}"
+              alt="Card image cap"
+            />
+            <h5 class="card-title">
+              <a
+                href="{% url 'detail_post' post.id %}"
+                class="text-decoration-none text-dark"
+                >{{post.title}}</a
+              >
+            </h5>
+            <p class="card-text">{{post.content | truncatewords:10}}</p>
+            <p>Author:{{post.account.first_name}}</p>
+            <p>
+              Category: {% for catego in post.category.all %}
+              <button class="btn btn-primary btn-sm m-2 text-white" disabled>
+                {{catego.name}}
+              </button>
+              {% if request.user.is_authenticated %}
+              <a
+                class="btn btn-dark align-items-center"
+                href="{% url 'edit_Cart' post.id %}"
+              >
+                Add to Cart
+              </a>
+              {% endif %} {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
